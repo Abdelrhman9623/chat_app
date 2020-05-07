@@ -1,15 +1,42 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../widgets/chats/new_message.dart';
 import '../widgets/chats/messages_widget.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  @override
+  void initState() {
+    final fsm = FirebaseMessaging();
+      fsm.requestNotificationPermissions();
+      fsm.configure(
+        onMessage: (msg) {
+          print(msg);
+          return;
+        },
+        onLaunch: (msg) {
+          print(msg);
+          return;
+        },
+        onResume: (msg) {
+          print(msg);
+          return;
+        }
+      );
+      fsm.subscribeToTopic('chat');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('chat-app'.toUpperCase()),
-        centerTitle: true,
+        // centerTitle: true,
         actions: <Widget>[
           DropdownButton(
             icon: Icon(Icons.more_vert, color: Theme.of(context).primaryIconTheme.color,),
